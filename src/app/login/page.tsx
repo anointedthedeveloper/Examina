@@ -4,10 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 
 export default function LoginPage() {
-  const [email, setEmail]               = useState('')
+  const [username, setUsername]         = useState('')
   const [password, setPassword]         = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [showForgot, setShowForgot]     = useState(false)
   const [error, setError]               = useState('')
   const [loading, setLoading]           = useState(false)
 
@@ -18,7 +17,7 @@ export default function LoginPage() {
     try {
       const { createClient } = await import('@/lib/supabase/client')
       const supabase = createClient()
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error } = await supabase.auth.signInWithPassword({ email: username, password })
       if (error) { setError(error.message); setLoading(false); return }
       window.location.href = '/dashboard'
     } catch {
@@ -89,73 +88,83 @@ export default function LoginPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-5">
 
-            {/* Email */}
-            <input
-              type="email"
-              placeholder="Your Email"
-              autoComplete="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              className="w-full rounded-xl bg-white px-5 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
-              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
-              onFocus={e => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
-              onBlur={e  => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)')}
-            />
+            {/* Username */}
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="username" className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                placeholder="Enter your username"
+                autoComplete="username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required
+                className="w-full rounded-xl bg-white px-4 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all"
+                style={{ border: '1.5px solid #e5e7eb' }}
+                onFocus={e => (e.currentTarget.style.border = '1.5px solid #681DF4')}
+                onBlur={e  => (e.currentTarget.style.border = '1.5px solid #e5e7eb')}
+              />
+            </div>
 
             {/* Password */}
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                autoComplete="current-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                className="w-full rounded-xl bg-white px-5 py-3.5 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
-                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
-                onFocus={e => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
-                onBlur={e  => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)')}
-              />
-              <button
-                type="button"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-                onClick={() => setShowPassword(v => !v)}
-                className="absolute right-4 top-1/2 -translate-y-1/2"
-                style={{ color: showPassword ? '#681DF4' : '#9ca3af' }}
-              >
-                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-              </button>
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="w-full rounded-xl bg-white px-4 py-3.5 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all"
+                  style={{ border: '1.5px solid #e5e7eb' }}
+                  onFocus={e => (e.currentTarget.style.border = '1.5px solid #681DF4')}
+                  onBlur={e  => (e.currentTarget.style.border = '1.5px solid #e5e7eb')}
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  onClick={() => setShowPassword(v => !v)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
+                  style={{ color: showPassword ? '#681DF4' : '#9ca3af' }}
+                >
+                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
+              </div>
             </div>
 
             {/* Forgot row */}
-            <div className="flex items-start justify-between gap-4 pt-1">
-              <div className="flex-1">
-                <button
-                  type="button"
-                  onClick={() => setShowForgot(v => !v)}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            <div className="flex items-center justify-between pt-1">
+              {/* Hover tooltip */}
+              <div className="relative group">
+                <span
+                  className="text-xs cursor-default transition-colors"
+                  style={{ color: '#681DF4' }}
                 >
                   Forgot password?
-                </button>
-
-                {showForgot && (
-                  <div
-                    className="mt-2 rounded-xl px-4 py-3 text-xs text-gray-600 leading-relaxed border border-purple-100"
-                    style={{ background: '#f5f0ff' }}
-                  >
-                    <p className="font-semibold text-gray-700 mb-0.5">Can&apos;t access your account?</p>
-                    <p>
-                      Contact your{' '}
-                      <span className="font-semibold" style={{ color: '#681DF4' }}>
-                        school administrator
-                      </span>{' '}
-                      to reset your password. Your admin can update credentials from the admin dashboard.
-                    </p>
-                  </div>
-                )}
+                </span>
+                {/* Tooltip — visible on hover */}
+                <div
+                  className="absolute bottom-full left-0 mb-2 w-64 rounded-xl px-4 py-3 text-xs text-gray-600 leading-relaxed border border-purple-100 pointer-events-none
+                    opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0
+                    transition-all duration-200 z-10"
+                  style={{ background: '#f5f0ff', boxShadow: '0 8px 24px rgba(104,29,244,0.12)' }}
+                >
+                  <p className="font-bold text-gray-800 mb-1">Can&apos;t access your account?</p>
+                  <p>
+                    Contact your{' '}
+                    <span className="font-semibold" style={{ color: '#681DF4' }}>school administrator</span>
+                    {' '}to reset your password or recover access to your account.
+                  </p>
+                </div>
               </div>
 
               <button
@@ -251,253 +260,183 @@ function SmallDots() {
 
 /* ─── CBT Animation ──────────────────────────────────────────────── */
 
-const QUESTIONS = [
-  {
-    subject: 'General Knowledge',
-    qNum: 1, total: 5, progress: 20,
-    text: 'What is the capital city of Nigeria?',
-    opts: ['Lagos', 'Abuja', 'Kano', 'Ibadan'],
-    ans: 1,
-    timer: '29:47',
-  },
-  {
-    subject: 'Mathematics',
-    qNum: 2, total: 5, progress: 40,
-    text: 'Solve for x:  2x + 4 = 12',
-    opts: ['x = 2', 'x = 4', 'x = 6', 'x = 8'],
-    ans: 1,
-    timer: '28:12',
-  },
-  {
-    subject: 'Basic Science',
-    qNum: 3, total: 5, progress: 60,
-    text: 'What is the chemical formula for water?',
-    opts: ['CO₂', 'H₂O₂', 'H₂O', 'NaCl'],
-    ans: 2,
-    timer: '26:55',
-  },
-]
-
-type Phase = 'entering' | 'visible' | 'answering' | 'exiting'
-
 function CbtAnimation() {
-  const [qIndex, setQIndex]   = useState(0)
-  const [phase, setPhase]     = useState<Phase>('entering')
-  const [selOpt, setSelOpt]   = useState<number | null>(null)
-  const timerRef              = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const LOOP = 6 // seconds per cycle
 
-  function clear() { if (timerRef.current) clearTimeout(timerRef.current) }
-
-  useEffect(() => {
-    // Phase timeline per question:
-    // entering  → 600ms  (slide in)
-    // visible   → 1400ms (options pop in one by one)
-    // answering → 900ms  (highlight answer + checkmark)
-    // exiting   → 600ms  (slide out) → next question
-    clear()
-
-    if (phase === 'entering') {
-      setSelOpt(null)
-      timerRef.current = setTimeout(() => setPhase('visible'), 600)
-    } else if (phase === 'visible') {
-      timerRef.current = setTimeout(() => {
-        setSelOpt(QUESTIONS[qIndex].ans)
-        setPhase('answering')
-      }, 1800)
-    } else if (phase === 'answering') {
-      timerRef.current = setTimeout(() => setPhase('exiting'), 1000)
-    } else if (phase === 'exiting') {
-      timerRef.current = setTimeout(() => {
-        setQIndex(i => (i + 1) % QUESTIONS.length)
-        setPhase('entering')
-      }, 600)
-    }
-
-    return clear
-  }, [phase, qIndex])
-
-  const q = QUESTIONS[qIndex]
-
-  const slideStyle: React.CSSProperties = {
-    transition: 'transform 0.55s cubic-bezier(0.4,0,0.2,1), opacity 0.55s ease',
-    transform:
-      phase === 'entering' ? 'translateX(60px) skewX(-4deg)' :
-      phase === 'exiting'  ? 'translateX(-60px) skewX(4deg)' :
-      'translateX(0) skewX(0)',
-    opacity: (phase === 'entering' || phase === 'exiting') ? 0 : 1,
+  // Build a keyframe string: element is invisible, fades in at `delay` seconds,
+  // holds until near the end, then fades out so the loop looks clean.
+  function kf(delaySec: number, riseDur = 0.45) {
+    const L = LOOP
+    const a = ((delaySec) / L * 100).toFixed(1)
+    const b = ((delaySec + riseDur) / L * 100).toFixed(1)
+    const c = (((L - 0.55) / L) * 100).toFixed(1)
+    return [
+      `0%{opacity:0;transform:translateY(7px)}`,
+      `${a}%{opacity:0;transform:translateY(7px)}`,
+      `${b}%{opacity:1;transform:translateY(0)}`,
+      `${c}%{opacity:1;transform:translateY(0)}`,
+      `100%{opacity:0;transform:translateY(0)}`,
+    ].join('')
   }
 
-  return (
-    <div className="select-none" aria-hidden="true" style={{ width: 264 }}>
+  function popKf(delaySec: number) {
+    const L = LOOP
+    const a = ((delaySec) / L * 100).toFixed(1)
+    const b = ((delaySec + 0.35) / L * 100).toFixed(1)
+    const c = (((L - 0.55) / L) * 100).toFixed(1)
+    return [
+      `0%{opacity:0;transform:scale(0.4)}`,
+      `${a}%{opacity:0;transform:scale(0.4)}`,
+      `${b}%{opacity:1;transform:scale(1)}`,
+      `${c}%{opacity:1;transform:scale(1)}`,
+      `100%{opacity:0;transform:scale(1)}`,
+    ].join('')
+  }
 
-      {/* School name tag */}
-      <div className="flex items-center justify-between mb-2 px-1">
-        <div style={{ display:'flex', alignItems:'center', gap:5 }}>
-          <div style={{
-            width:18, height:18, borderRadius:'50%',
-            background:'#681DF4',
-            display:'flex', alignItems:'center', justifyContent:'center',
-          }}>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-              <polyline points="9,22 9,12 15,12 15,22"/>
-            </svg>
-          </div>
-          <span style={{ fontSize:9, fontWeight:700, color:'#681DF4', letterSpacing:0.3 }}>
-            Peter Harvard International Schools
-          </span>
-        </div>
-        {/* Pencil */}
-        <div style={{ animation:'cbtPencil 2.2s ease-in-out infinite', transformOrigin:'bottom center' }}>
-          <svg width="18" height="52" viewBox="0 0 18 52">
-            <rect x="3" y="0" width="12" height="36" rx="2" fill="#fbbf24"/>
-            <rect x="3" y="0" width="12" height="6" rx="2" fill="#f87171"/>
-            <rect x="3" y="6" width="12" height="3" fill="#d1d5db"/>
-            <polygon points="3,36 15,36 9,46" fill="#fde68a"/>
-            <polygon points="6,41 12,41 9,46" fill="#1c1917"/>
-            <rect x="6" y="9" width="2" height="24" rx="1" fill="white" opacity="0.22"/>
+  const opts  = ['Lagos', 'Abuja', 'Kano', 'Ibadan']
+  const ans   = 1 // Abuja
+
+  return (
+    <div className="select-none" aria-hidden="true" style={{ width: 260 }}>
+
+      {/* Floating pencil above the card */}
+      <div className="flex justify-end mb-3 pr-4">
+        <div style={{ animation: 'cbtPencil 2.2s ease-in-out infinite', transformOrigin: 'bottom center' }}>
+          <svg width="28" height="80" viewBox="0 0 28 80">
+            <rect x="5" y="0" width="18" height="56" rx="3" fill="#fbbf24" />
+            <rect x="5" y="0" width="18" height="9" rx="3" fill="#f87171" />
+            <rect x="5" y="9" width="18" height="4" fill="#d1d5db" />
+            <polygon points="5,56 23,56 14,70" fill="#fde68a" />
+            <polygon points="9,63 19,63 14,70" fill="#1c1917" />
+            <rect x="9" y="14" width="3" height="38" rx="1.5" fill="white" opacity="0.22" />
           </svg>
         </div>
       </div>
 
-      {/* Card with slide transition */}
-      <div style={{ overflow:'hidden', borderRadius:16 }}>
-        <div style={slideStyle}>
-          <div style={{
-            background:'white',
-            borderRadius:16,
-            boxShadow:'0 12px 40px rgba(104,29,244,0.15)',
-            overflow:'hidden',
-          }}>
-
-            {/* Header */}
+      {/* Exam card */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: 'white',
+          boxShadow: '0 12px 40px rgba(104,29,244,0.15)',
+        }}
+      >
+        {/* Card header */}
+        <div style={{ background: '#681DF4', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <div style={{
-              background:'#681DF4', padding:'9px 14px',
-              display:'flex', alignItems:'center', justifyContent:'space-between',
+              background: 'rgba(255,255,255,0.2)', borderRadius: 6,
+              padding: '2px 8px', fontSize: 8, color: 'white', fontWeight: 700, letterSpacing: 1.2
             }}>
-              <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+              CBT
+            </div>
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 9, fontWeight: 600 }}>
+              General Knowledge
+            </span>
+          </div>
+          {/* Timer */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4,
+            background: 'rgba(255,255,255,0.15)', borderRadius: 20, padding: '2px 8px',
+            opacity: 0, animation: `cbtA0 ${LOOP}s ease-in-out infinite`,
+          }}>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+            <span style={{ fontSize: 9, color: 'white', fontWeight: 700 }}>29:47</span>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div style={{ padding: '8px 16px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 8, color: '#9ca3af', fontWeight: 600 }}>Question 2 of 10</span>
+            <span style={{ fontSize: 8, color: '#681DF4', fontWeight: 700 }}>20%</span>
+          </div>
+          <div style={{ height: 5, borderRadius: 9999, background: '#ede9fe' }}>
+            <div style={{
+              height: '100%', width: '20%', borderRadius: 9999,
+              background: 'linear-gradient(90deg, #681DF4, #a78bfa)',
+              opacity: 0, animation: `cbtA0 ${LOOP}s ease-in-out infinite`,
+            }} />
+          </div>
+        </div>
+
+        {/* Question body */}
+        <div style={{ padding: '12px 16px 14px' }}>
+
+          {/* Q text */}
+          <p style={{
+            fontSize: 11, color: '#1f2937', fontWeight: 700, lineHeight: 1.55, marginBottom: 12,
+            opacity: 0, animation: `cbtA1 ${LOOP}s ease-in-out infinite`,
+          }}>
+            What is the capital city of Nigeria?
+          </p>
+
+          {/* Options */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+            {opts.map((opt, j) => (
+              <div
+                key={opt}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 9,
+                  borderRadius: 10, padding: '7px 10px',
+                  background: j === ans ? '#f5f0ff' : '#fafafa',
+                  border: `1.5px solid ${j === ans ? '#681DF4' : '#e5e7eb'}`,
+                  opacity: 0,
+                  animation: `cbtOpt${j} ${LOOP}s ease-in-out infinite`,
+                }}
+              >
                 <div style={{
-                  background:'rgba(255,255,255,0.22)', borderRadius:5,
-                  padding:'2px 7px', fontSize:7.5, color:'white', fontWeight:800, letterSpacing:1.2,
-                }}>CBT</div>
-                <span style={{ color:'rgba(255,255,255,0.9)', fontSize:8.5, fontWeight:600 }}>
-                  {q.subject}
+                  width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                  background: j === ans ? '#681DF4' : '#ede9fe',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 8, fontWeight: 800,
+                  color: j === ans ? 'white' : '#a78bfa',
+                }}>
+                  {['A','B','C','D'][j]}
+                </div>
+                <span style={{
+                  fontSize: 10,
+                  color: j === ans ? '#681DF4' : '#374151',
+                  fontWeight: j === ans ? 700 : 500,
+                }}>
+                  {opt}
                 </span>
+                {j === ans && (
+                  <div style={{ marginLeft: 'auto' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" fill="#681DF4"/>
+                      <path d="M7 12.5 l3.5 3.5 l6-7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                )}
               </div>
-              <div style={{
-                display:'flex', alignItems:'center', gap:3,
-                background:'rgba(255,255,255,0.15)', borderRadius:20, padding:'2px 7px',
-              }}>
-                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                  <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-                </svg>
-                <span style={{ fontSize:8.5, color:'white', fontWeight:700 }}>{q.timer}</span>
-              </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Progress */}
-            <div style={{ padding:'8px 14px 0' }}>
-              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:3 }}>
-                <span style={{ fontSize:7.5, color:'#9ca3af', fontWeight:600 }}>
-                  Question {q.qNum} of {q.total}
-                </span>
-                <span style={{ fontSize:7.5, color:'#681DF4', fontWeight:700 }}>{q.progress}%</span>
-              </div>
-              <div style={{ height:4, borderRadius:9999, background:'#ede9fe' }}>
-                <div style={{
-                  height:'100%', borderRadius:9999,
-                  background:'linear-gradient(90deg,#681DF4,#a78bfa)',
-                  width:`${q.progress}%`,
-                  transition:'width 0.6s ease',
-                }}/>
-              </div>
-            </div>
-
-            {/* Question + options */}
-            <div style={{ padding:'11px 14px 13px' }}>
-              <p style={{ fontSize:10.5, color:'#111827', fontWeight:700, lineHeight:1.55, marginBottom:10 }}>
-                {q.text}
-              </p>
-
-              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
-                {q.opts.map((opt, j) => {
-                  const isAns      = j === q.ans
-                  const isSelected = selOpt === j
-                  const delay      = `${j * 120}ms`
-
-                  return (
-                    <div
-                      key={opt}
-                      style={{
-                        display:'flex', alignItems:'center', gap:8,
-                        borderRadius:9, padding:'6px 9px',
-                        background: isSelected ? '#f5f0ff' : '#fafafa',
-                        border:`1.5px solid ${isSelected ? '#681DF4' : '#e5e7eb'}`,
-                        transition:`all 0.3s ease ${delay}`,
-                        transform: phase === 'visible' ? 'translateX(0)' : 'translateX(0)',
-                        opacity: phase === 'entering' ? 0 : 1,
-                        transitionDelay: phase === 'entering' ? delay : '0ms',
-                      }}
-                    >
-                      <div style={{
-                        width:19, height:19, borderRadius:'50%', flexShrink:0,
-                        background: isSelected ? '#681DF4' : '#ede9fe',
-                        display:'flex', alignItems:'center', justifyContent:'center',
-                        fontSize:7.5, fontWeight:800,
-                        color: isSelected ? 'white' : '#a78bfa',
-                        transition:'all 0.3s ease',
-                      }}>
-                        {isSelected && isAns
-                          ? <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 5.5l2 2 4-4" stroke="white" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                          : ['A','B','C','D'][j]
-                        }
-                      </div>
-                      <span style={{
-                        fontSize:9.5,
-                        color: isSelected ? '#681DF4' : '#374151',
-                        fontWeight: isSelected ? 700 : 500,
-                        transition:'color 0.3s ease',
-                      }}>
-                        {opt}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Next / Submit button */}
-              <div style={{
-                marginTop:10, borderRadius:9, padding:'8px 0',
-                background: phase === 'answering' ? '#681DF4' : '#ede9fe',
-                textAlign:'center', fontSize:9.5, fontWeight:800,
-                color: phase === 'answering' ? 'white' : '#c4b5fd',
-                letterSpacing:0.8, transition:'all 0.35s ease',
-                cursor:'default',
-              }}>
-                {q.qNum < q.total ? 'NEXT QUESTION →' : 'SUBMIT EXAM ✓'}
-              </div>
-            </div>
-
+          {/* Next button */}
+          <div style={{
+            marginTop: 12, borderRadius: 10, padding: '9px 0',
+            background: '#681DF4', textAlign: 'center',
+            fontSize: 10, fontWeight: 800, color: 'white', letterSpacing: 0.8,
+            opacity: 0, animation: `cbtNext ${LOOP}s ease-in-out infinite`,
+            cursor: 'default',
+          }}>
+            NEXT QUESTION →
           </div>
         </div>
       </div>
 
-      {/* Question dot indicators */}
-      <div style={{ display:'flex', justifyContent:'center', gap:6, marginTop:10 }}>
-        {QUESTIONS.map((_, i) => (
-          <div key={i} style={{
-            width: i === qIndex ? 18 : 6,
-            height:6, borderRadius:9999,
-            background: i === qIndex ? '#681DF4' : '#c4b5fd',
-            transition:'all 0.35s ease',
-          }}/>
-        ))}
-      </div>
-
+      {/* Keyframes */}
       <style>{`
+        @keyframes cbtA0    { ${kf(0.1, 0.5)} }
+        @keyframes cbtA1    { ${kf(0.4, 0.45)} }
+        ${opts.map((_, j) => `@keyframes cbtOpt${j} { ${popKf(0.9 + j * 0.28)} }`).join('\n')}
+        @keyframes cbtNext  { ${kf(2.2, 0.4)} }
         @keyframes cbtPencil {
-          0%,100% { transform:translateY(0) rotate(-14deg); }
-          50%      { transform:translateY(-8px) rotate(-8deg); }
+          0%,100% { transform: translateY(0) rotate(-15deg); }
+          50%      { transform: translateY(-10px) rotate(-9deg); }
         }
       `}</style>
     </div>
