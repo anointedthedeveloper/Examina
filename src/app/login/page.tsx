@@ -29,214 +29,171 @@ export default function LoginPage() {
 
   return (
     <main
-      className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden"
-      style={{ background: 'linear-gradient(140deg, #2d0780 0%, #4c0fcc 45%, #681DF4 75%, #7928f5 100%)' }}
+      className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #3b0ca8 0%, #5612d6 45%, #681DF4 100%)' }}
     >
       {/* Background dot grids */}
-      <DotGrid className="absolute top-8 left-8 opacity-[0.18] hidden sm:block" />
-      <DotGrid className="absolute bottom-8 right-10 opacity-[0.18] hidden sm:block" />
+      <BgDots className="absolute top-8 left-10 opacity-20" />
+      <BgDots className="absolute bottom-10 right-12 opacity-20" />
 
-      {/* Decorative accents */}
-      <div className="absolute bottom-14 left-16 w-12 h-12 rounded-lg rotate-12 hidden sm:block"
-        style={{ border: '2px solid rgba(255,255,255,0.25)' }} />
-      <div className="absolute bottom-8 left-32 hidden sm:block"
-        style={{ width:0, height:0, borderLeft:'10px solid transparent', borderRight:'10px solid transparent', borderBottom:'18px solid #22d3ee', opacity:0.75 }} />
-      <div className="absolute top-10 right-6 w-20 h-7 rounded opacity-65 -rotate-1 hidden sm:block"
-        style={{ background: '#22d3ee' }} />
-      <div className="absolute top-28 right-10 w-3 h-3 rounded-full hidden sm:block"
-        style={{ background: 'rgba(255,255,255,0.35)' }} />
-      <div className="absolute bottom-24 left-8 w-2 h-2 rounded-full hidden sm:block"
-        style={{ background: 'rgba(255,255,255,0.3)' }} />
+      {/* Decorative accents — matching reference */}
+      <div className="absolute bottom-16 left-20 w-12 h-12 rounded-lg rotate-12 hidden sm:block"
+        style={{ border: '2px solid rgba(255,255,255,0.3)' }} />
+      <div className="absolute bottom-10 left-36 hidden sm:block"
+        style={{ width:0, height:0,
+          borderLeft:'10px solid transparent', borderRight:'10px solid transparent',
+          borderBottom:'18px solid #22d3ee', opacity:0.9 }} />
+      <div className="absolute top-10 right-6 w-20 h-7 rounded opacity-80 -rotate-1 hidden sm:block"
+        style={{ background:'#22d3ee' }} />
 
-      {/* Card */}
+      {/* ── Card ── */}
       <div
-        className="relative w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
-        style={{ background: '#f2f1f8', minHeight: 500 }}
+        className="relative w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
+        style={{ maxWidth: 860, background: '#f0eff6' }}
       >
 
-        {/* ── Left: Form ── */}
+        {/* ─── Left: Form ─── */}
         <div className="flex flex-col flex-1 px-10 py-10 sm:px-12 sm:py-12">
 
-          {/* Logo — bigger */}
-          <div className="flex items-center gap-3 mb-8">
+          {/* Logo */}
+          <div className="flex items-center gap-3 mb-10">
             <Image
               src="/examina.png"
-              alt="Examina logo"
-              width={52}
-              height={52}
+              alt="Examina"
+              width={50}
+              height={50}
               className="rounded-2xl"
-              style={{ boxShadow: '0 4px 14px rgba(104,29,244,0.25)' }}
+              style={{ boxShadow: '0 4px 16px rgba(104,29,244,0.3)' }}
             />
             <div>
-              <p className="text-3xl font-extrabold tracking-tight leading-none" style={{ color: '#681DF4' }}>
+              <p className="text-[26px] font-extrabold leading-none tracking-tight"
+                style={{ color: '#681DF4' }}>
                 Examina
               </p>
-              <p className="text-xs text-gray-400 mt-0.5 tracking-wide">CBT Exam Portal</p>
+              <p className="text-[11px] tracking-widest font-semibold mt-0.5"
+                style={{ color: '#a78bfa' }}>
+                CBT EXAM PORTAL
+              </p>
             </div>
           </div>
 
           {/* Heading */}
-          <div className="mb-7">
-            <h1 className="text-xl font-bold text-gray-800 leading-snug">Welcome back</h1>
-            <p className="text-sm text-gray-500 mt-1">Sign in to access your exam portal</p>
-          </div>
+          <p className="text-gray-600 font-semibold text-sm mb-6">Login to your account</p>
 
           {/* Error */}
           {error && (
-            <div role="alert" className="mb-5 rounded-xl px-4 py-3 text-sm text-red-700 border border-red-200 bg-red-50">
+            <div role="alert"
+              className="mb-5 rounded-xl px-4 py-3 text-sm text-red-700 border border-red-200 bg-red-50">
               {error}
             </div>
           )}
 
           {/* Form */}
-          <form onSubmit={handleLogin} className="space-y-4 flex-1">
+          <form onSubmit={handleLogin} className="space-y-4">
 
             {/* Email */}
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Email Address
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="you@school.edu"
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full rounded-xl bg-white px-4 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition"
-                style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
-                onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
-                onBlur={(e)  => (e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.07)')}
-              />
-            </div>
+            <input
+              type="email"
+              placeholder="Your Email"
+              autoComplete="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className="w-full rounded-xl bg-white px-5 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+              style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
+              onFocus={e => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
+              onBlur={e  => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)')}
+            />
 
             {/* Password */}
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="password" className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="w-full rounded-xl bg-white px-4 py-3.5 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition"
-                  style={{ boxShadow: '0 1px 4px rgba(0,0,0,0.07)' }}
-                  onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
-                  onBlur={(e)  => (e.currentTarget.style.boxShadow = '0 1px 4px rgba(0,0,0,0.07)')}
-                />
-                <button
-                  type="button"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  onClick={() => setShowPassword(v => !v)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: showPassword ? '#681DF4' : '#9ca3af' }}
-                >
-                  {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-                </button>
-              </div>
-            </div>
-
-            {/* Forgot password */}
             <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                autoComplete="current-password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="w-full rounded-xl bg-white px-5 py-3.5 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none"
+                style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.07)' }}
+                onFocus={e => (e.currentTarget.style.boxShadow = '0 0 0 2.5px #681DF4')}
+                onBlur={e  => (e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.07)')}
+              />
               <button
                 type="button"
-                onClick={() => setShowForgot(v => !v)}
-                className="text-xs font-medium transition-colors"
-                style={{ color: '#681DF4' }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                onClick={() => setShowPassword(v => !v)}
+                className="absolute right-4 top-1/2 -translate-y-1/2"
+                style={{ color: showPassword ? '#681DF4' : '#9ca3af' }}
               >
-                Forgot password?
+                {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
-
-              {showForgot && (
-                <div
-                  className="mt-2 rounded-xl px-4 py-3.5 text-xs text-gray-600 leading-relaxed border border-purple-100"
-                  style={{ background: '#f5f0ff' }}
-                >
-                  <p className="font-semibold text-gray-700 mb-1">Can&apos;t access your account?</p>
-                  <p>
-                    Please contact your <span className="font-semibold" style={{ color: '#681DF4' }}>school administrator</span> to
-                    reset your password or recover your account. Your admin can update your credentials from the admin dashboard.
-                  </p>
-                </div>
-              )}
             </div>
 
-            {/* Login button */}
-            <div className="pt-2">
+            {/* Forgot row */}
+            <div className="flex items-start justify-between gap-4 pt-1">
+              <div className="flex-1">
+                <button
+                  type="button"
+                  onClick={() => setShowForgot(v => !v)}
+                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  Forgot password?
+                </button>
+
+                {showForgot && (
+                  <div
+                    className="mt-2 rounded-xl px-4 py-3 text-xs text-gray-600 leading-relaxed border border-purple-100"
+                    style={{ background: '#f5f0ff' }}
+                  >
+                    <p className="font-semibold text-gray-700 mb-0.5">Can&apos;t access your account?</p>
+                    <p>
+                      Contact your{' '}
+                      <span className="font-semibold" style={{ color: '#681DF4' }}>
+                        school administrator
+                      </span>{' '}
+                      to reset your password. Your admin can update credentials from the admin dashboard.
+                    </p>
+                  </div>
+                )}
+              </div>
+
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl py-3.5 text-sm font-bold text-white transition-opacity disabled:opacity-60 shadow-lg"
-                style={{ background: 'linear-gradient(135deg, #5a12d4, #681DF4)', letterSpacing: '0.03em' }}
+                className="flex-shrink-0 rounded-full px-8 py-2.5 text-sm font-bold text-white disabled:opacity-60 shadow-lg transition-opacity"
+                style={{ background: '#681DF4' }}
               >
                 {loading ? (
-                  <span className="flex items-center justify-center gap-2">
+                  <span className="flex items-center gap-2">
                     <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                     </svg>
-                    Signing in…
+                    Logging in
                   </span>
-                ) : 'Sign In to Portal'}
+                ) : 'Login'}
               </button>
             </div>
+
           </form>
 
           {/* Footer */}
-          <p className="text-xs text-gray-400 mt-8">
+          <p className="text-xs text-gray-400 mt-10">
             &copy; {new Date().getFullYear()} Anobyte Technologies
           </p>
         </div>
 
-        {/* ── Right: CBT Animation panel ── */}
+        {/* ─── Right: Animation ─── */}
         <div
-          className="hidden md:flex flex-col items-center justify-center gap-5 px-8 py-10 relative"
-          style={{ background: 'linear-gradient(160deg, #681DF4 0%, #4c0fcc 100%)', minWidth: 320 }}
+          className="hidden md:flex flex-1 items-center justify-center relative px-6 py-10"
+          style={{ background: '#f0eff6' }}
         >
-          {/* Panel dot grid */}
-          <div className="absolute top-6 right-6 opacity-20">
-            <SmallDotGrid />
+          {/* Small dot accent */}
+          <div className="absolute top-5 right-5 opacity-25">
+            <SmallDots />
           </div>
-          <div className="absolute bottom-6 left-6 opacity-15">
-            <SmallDotGrid />
-          </div>
-
-          {/* Label */}
-          <div className="text-center z-10">
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(4px)' }}>
-              <span className="text-white text-xs font-bold tracking-widest uppercase">CBT Exam Portal</span>
-            </div>
-            <p className="text-white text-lg font-bold leading-snug">
-              Computer-Based<br />Testing Made Simple
-            </p>
-            <p className="text-purple-200 text-xs mt-2 leading-relaxed max-w-[220px] mx-auto">
-              Take exams, get instant results, and track your progress — all in one place.
-            </p>
-          </div>
-
-          {/* Animation */}
           <CbtAnimation />
-
-          {/* Stats strip */}
-          <div className="flex gap-6 z-10">
-            {[
-              { val: '100%', label: 'Online' },
-              { val: 'Auto', label: 'Graded' },
-              { val: 'Live', label: 'Results' },
-            ].map(s => (
-              <div key={s.label} className="text-center">
-                <p className="text-white font-extrabold text-lg leading-none">{s.val}</p>
-                <p className="text-purple-200 text-xs mt-0.5">{s.label}</p>
-              </div>
-            ))}
-          </div>
         </div>
 
       </div>
@@ -244,13 +201,15 @@ export default function LoginPage() {
   )
 }
 
-/* ─── Icons ───────────────────────────────────────────────────── */
+/* ─── Icons ─────────────────────────────────────────────────────── */
 
 function EyeIcon() {
   return (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
     </svg>
   )
 }
@@ -258,182 +217,203 @@ function EyeIcon() {
 function EyeOffIcon() {
   return (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
     </svg>
   )
 }
 
-/* ─── Dot grids ───────────────────────────────────────────────── */
+/* ─── Decorative ─────────────────────────────────────────────────── */
 
-function DotGrid({ className }: { className?: string }) {
+function BgDots({ className }: { className?: string }) {
   return (
-    <svg width="88" height="88" viewBox="0 0 88 88" className={className} aria-hidden="true">
-      {Array.from({ length: 6 }).map((_, row) =>
-        Array.from({ length: 6 }).map((_, col) => (
-          <circle key={`${row}-${col}`} cx={col * 16 + 8} cy={row * 16 + 8} r="2.5" fill="white" />
+    <svg width="90" height="90" viewBox="0 0 90 90" className={className} aria-hidden="true">
+      {Array.from({ length: 6 }).map((_, r) =>
+        Array.from({ length: 6 }).map((_, c) => (
+          <circle key={`${r}${c}`} cx={c * 16 + 8} cy={r * 16 + 8} r="2.5" fill="white" />
         ))
       )}
     </svg>
   )
 }
 
-function SmallDotGrid() {
+function SmallDots() {
   return (
     <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true">
-      {Array.from({ length: 4 }).map((_, row) =>
-        Array.from({ length: 4 }).map((_, col) => (
-          <circle key={`${row}-${col}`} cx={col * 16 + 8} cy={row * 16 + 8} r="2" fill="white" />
+      {Array.from({ length: 4 }).map((_, r) =>
+        Array.from({ length: 4 }).map((_, c) => (
+          <circle key={`${r}${c}`} cx={c * 16 + 8} cy={r * 16 + 8} r="2.5" fill="#681DF4" />
         ))
       )}
     </svg>
   )
 }
 
-/* ─── CBT Animation ───────────────────────────────────────────── */
+/* ─── CBT Animation ──────────────────────────────────────────────── */
 
 function CbtAnimation() {
-  const LOOP = 6
+  const LOOP = 6 // seconds per cycle
 
-  const questions = [
-    { q: 'What is the capital of Nigeria?', opts: ['Lagos', 'Abuja', 'Kano', 'Ibadan'], answer: 1 },
-    { q: 'Solve: 2x + 4 = 12', opts: ['x = 2', 'x = 4', 'x = 6', 'x = 8'], answer: 1 },
-    { q: 'H₂O is the formula for?', opts: ['Oxygen', 'Hydrogen', 'Water', 'Salt'], answer: 2 },
-  ]
-
-  function kf(delay: number, dur = 0.5) {
-    const totalFrames = LOOP
-    const inPct  = ((delay) / totalFrames * 100).toFixed(1)
-    const inEnd  = ((delay + dur) / totalFrames * 100).toFixed(1)
-    const outPct = (((totalFrames - 0.5) / totalFrames) * 100).toFixed(1)
-    return `0%{opacity:0;transform:translateY(8px)}${inPct}%{opacity:0;transform:translateY(8px)}${inEnd}%{opacity:1;transform:translateY(0)}${outPct}%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(0)}`
+  // Build a keyframe string: element is invisible, fades in at `delay` seconds,
+  // holds until near the end, then fades out so the loop looks clean.
+  function kf(delaySec: number, riseDur = 0.45) {
+    const L = LOOP
+    const a = ((delaySec) / L * 100).toFixed(1)
+    const b = ((delaySec + riseDur) / L * 100).toFixed(1)
+    const c = (((L - 0.55) / L) * 100).toFixed(1)
+    return [
+      `0%{opacity:0;transform:translateY(7px)}`,
+      `${a}%{opacity:0;transform:translateY(7px)}`,
+      `${b}%{opacity:1;transform:translateY(0)}`,
+      `${c}%{opacity:1;transform:translateY(0)}`,
+      `100%{opacity:0;transform:translateY(0)}`,
+    ].join('')
   }
 
-  function bubbleKf(delay: number) {
-    const totalFrames = LOOP
-    const inPct  = ((delay) / totalFrames * 100).toFixed(1)
-    const inEnd  = ((delay + 0.35) / totalFrames * 100).toFixed(1)
-    const outPct = (((totalFrames - 0.5) / totalFrames) * 100).toFixed(1)
-    return `0%{opacity:0;transform:scale(0.5)}${inPct}%{opacity:0;transform:scale(0.5)}${inEnd}%{opacity:1;transform:scale(1)}${outPct}%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1)}`
+  function popKf(delaySec: number) {
+    const L = LOOP
+    const a = ((delaySec) / L * 100).toFixed(1)
+    const b = ((delaySec + 0.35) / L * 100).toFixed(1)
+    const c = (((L - 0.55) / L) * 100).toFixed(1)
+    return [
+      `0%{opacity:0;transform:scale(0.4)}`,
+      `${a}%{opacity:0;transform:scale(0.4)}`,
+      `${b}%{opacity:1;transform:scale(1)}`,
+      `${c}%{opacity:1;transform:scale(1)}`,
+      `100%{opacity:0;transform:scale(1)}`,
+    ].join('')
   }
 
-  // Stagger: question at 0.3, options at 0.9, 1.2, 1.5, 1.8, submit at 2.4, progress at 0
-  const qDelay   = 0.3
-  const optStart = 0.9
-  const submitD  = 2.4
-  const progD    = 0.1
+  const opts  = ['Lagos', 'Abuja', 'Kano', 'Ibadan']
+  const ans   = 1 // Abuja
 
   return (
-    <div className="relative z-10 select-none" aria-hidden="true" style={{ width: 240 }}>
+    <div className="select-none" aria-hidden="true" style={{ width: 260 }}>
 
-      {/* Monitor frame */}
-      <div className="rounded-2xl overflow-hidden"
-        style={{ background: 'rgba(255,255,255,0.12)', border: '1.5px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)' }}>
+      {/* Floating pencil above the card */}
+      <div className="flex justify-end mb-3 pr-4">
+        <div style={{ animation: 'cbtPencil 2.2s ease-in-out infinite', transformOrigin: 'bottom center' }}>
+          <svg width="28" height="80" viewBox="0 0 28 80">
+            <rect x="5" y="0" width="18" height="56" rx="3" fill="#fbbf24" />
+            <rect x="5" y="0" width="18" height="9" rx="3" fill="#f87171" />
+            <rect x="5" y="9" width="18" height="4" fill="#d1d5db" />
+            <polygon points="5,56 23,56 14,70" fill="#fde68a" />
+            <polygon points="9,63 19,63 14,70" fill="#1c1917" />
+            <rect x="9" y="14" width="3" height="38" rx="1.5" fill="white" opacity="0.22" />
+          </svg>
+        </div>
+      </div>
 
-        {/* Browser chrome bar */}
-        <div className="flex items-center gap-1.5 px-3 py-2" style={{ background: 'rgba(0,0,0,0.2)' }}>
-          <div className="w-2 h-2 rounded-full bg-red-400 opacity-80" />
-          <div className="w-2 h-2 rounded-full bg-yellow-300 opacity-80" />
-          <div className="w-2 h-2 rounded-full bg-green-400 opacity-80" />
-          <div className="flex-1 mx-2 h-4 rounded-full text-center"
-            style={{ background: 'rgba(255,255,255,0.12)', fontSize: 7, color: 'rgba(255,255,255,0.6)', lineHeight: '16px', letterSpacing: 0.5 }}>
-            examina.school/exam
+      {/* Exam card */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: 'white',
+          boxShadow: '0 12px 40px rgba(104,29,244,0.15)',
+        }}
+      >
+        {/* Card header */}
+        <div style={{ background: '#681DF4', padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.2)', borderRadius: 6,
+              padding: '2px 8px', fontSize: 8, color: 'white', fontWeight: 700, letterSpacing: 1.2
+            }}>
+              CBT
+            </div>
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 9, fontWeight: 600 }}>
+              General Knowledge
+            </span>
+          </div>
+          {/* Timer */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4,
+            background: 'rgba(255,255,255,0.15)', borderRadius: 20, padding: '2px 8px',
+            opacity: 0, animation: `cbtA0 ${LOOP}s ease-in-out infinite`,
+          }}>
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+            <span style={{ fontSize: 9, color: 'white', fontWeight: 700 }}>29:47</span>
           </div>
         </div>
 
-        {/* Exam UI */}
-        <div className="px-4 py-3" style={{ minHeight: 180 }}>
-
-          {/* Progress bar */}
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex-1 rounded-full h-1.5" style={{ background: 'rgba(255,255,255,0.2)' }}>
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: '40%',
-                  background: '#22d3ee',
-                  opacity: 0,
-                  animation: `cbtProg ${LOOP}s ease-in-out infinite`,
-                }}
-              />
-            </div>
-            <span
-              style={{
-                fontSize: 8, color: 'rgba(255,255,255,0.7)', fontWeight: 700,
-                opacity: 0,
-                animation: `cbtProg ${LOOP}s ease-in-out infinite`,
-              }}
-            >
-              Q 2 / 5
-            </span>
+        {/* Progress bar */}
+        <div style={{ padding: '8px 16px 0' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 8, color: '#9ca3af', fontWeight: 600 }}>Question 2 of 10</span>
+            <span style={{ fontSize: 8, color: '#681DF4', fontWeight: 700 }}>20%</span>
           </div>
-
-          {/* Timer chip */}
-          <div
-            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 mb-3"
-            style={{
-              background: 'rgba(34,211,238,0.2)',
-              border: '1px solid rgba(34,211,238,0.4)',
-              opacity: 0,
-              animation: `cbtProg ${LOOP}s ease-in-out infinite`,
-            }}
-          >
-            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" strokeWidth="2.5">
-              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-            </svg>
-            <span style={{ fontSize: 8, color: '#22d3ee', fontWeight: 700 }}>28:14</span>
+          <div style={{ height: 5, borderRadius: 9999, background: '#ede9fe' }}>
+            <div style={{
+              height: '100%', width: '20%', borderRadius: 9999,
+              background: 'linear-gradient(90deg, #681DF4, #a78bfa)',
+              opacity: 0, animation: `cbtA0 ${LOOP}s ease-in-out infinite`,
+            }} />
           </div>
+        </div>
 
-          {/* Question */}
-          <div
-            style={{
-              fontSize: 10, color: 'white', fontWeight: 600, lineHeight: 1.5, marginBottom: 10,
-              opacity: 0,
-              animation: `cbtQ ${LOOP}s ease-in-out infinite`,
-            }}
-          >
-            {questions[0].q}
-          </div>
+        {/* Question body */}
+        <div style={{ padding: '12px 16px 14px' }}>
+
+          {/* Q text */}
+          <p style={{
+            fontSize: 11, color: '#1f2937', fontWeight: 700, lineHeight: 1.55, marginBottom: 12,
+            opacity: 0, animation: `cbtA1 ${LOOP}s ease-in-out infinite`,
+          }}>
+            What is the capital city of Nigeria?
+          </p>
 
           {/* Options */}
-          {questions[0].opts.map((opt, j) => (
-            <div
-              key={opt}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 7,
-                borderRadius: 8,
-                padding: '5px 8px',
-                marginBottom: 5,
-                background: j === questions[0].answer ? 'rgba(34,211,238,0.2)' : 'rgba(255,255,255,0.08)',
-                border: j === questions[0].answer ? '1px solid rgba(34,211,238,0.5)' : '1px solid rgba(255,255,255,0.1)',
-                opacity: 0,
-                animation: `cbtOpt${j} ${LOOP}s ease-in-out infinite`,
-              }}
-            >
-              <div style={{
-                width: 16, height: 16, borderRadius: '50%', flexShrink: 0,
-                background: j === questions[0].answer ? '#22d3ee' : 'rgba(255,255,255,0.15)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 7, fontWeight: 700,
-                color: j === questions[0].answer ? '#1e1b4b' : 'rgba(255,255,255,0.6)',
-              }}>
-                {['A','B','C','D'][j]}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+            {opts.map((opt, j) => (
+              <div
+                key={opt}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 9,
+                  borderRadius: 10, padding: '7px 10px',
+                  background: j === ans ? '#f5f0ff' : '#fafafa',
+                  border: `1.5px solid ${j === ans ? '#681DF4' : '#e5e7eb'}`,
+                  opacity: 0,
+                  animation: `cbtOpt${j} ${LOOP}s ease-in-out infinite`,
+                }}
+              >
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+                  background: j === ans ? '#681DF4' : '#ede9fe',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 8, fontWeight: 800,
+                  color: j === ans ? 'white' : '#a78bfa',
+                }}>
+                  {['A','B','C','D'][j]}
+                </div>
+                <span style={{
+                  fontSize: 10,
+                  color: j === ans ? '#681DF4' : '#374151',
+                  fontWeight: j === ans ? 700 : 500,
+                }}>
+                  {opt}
+                </span>
+                {j === ans && (
+                  <div style={{ marginLeft: 'auto' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="10" fill="#681DF4"/>
+                      <path d="M7 12.5 l3.5 3.5 l6-7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                )}
               </div>
-              <span style={{ fontSize: 9, color: j === questions[0].answer ? '#22d3ee' : 'rgba(255,255,255,0.75)', fontWeight: j === questions[0].answer ? 700 : 400 }}>
-                {opt}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
 
-          {/* Submit button */}
-          <div
-            style={{
-              marginTop: 8, borderRadius: 8, padding: '6px 0',
-              background: '#22d3ee', textAlign: 'center',
-              fontSize: 9, fontWeight: 800, color: '#1e1b4b', letterSpacing: 0.8,
-              opacity: 0,
-              animation: `cbtSubmit ${LOOP}s ease-in-out infinite`,
-            }}
-          >
+          {/* Next button */}
+          <div style={{
+            marginTop: 12, borderRadius: 10, padding: '9px 0',
+            background: '#681DF4', textAlign: 'center',
+            fontSize: 10, fontWeight: 800, color: 'white', letterSpacing: 0.8,
+            opacity: 0, animation: `cbtNext ${LOOP}s ease-in-out infinite`,
+            cursor: 'default',
+          }}>
             NEXT QUESTION →
           </div>
         </div>
@@ -441,13 +421,13 @@ function CbtAnimation() {
 
       {/* Keyframes */}
       <style>{`
-        @keyframes cbtProg   { ${kf(progD, 0.6)} }
-        @keyframes cbtQ      { ${kf(qDelay, 0.5)} }
-        ${questions[0].opts.map((_, j) => `@keyframes cbtOpt${j} { ${bubbleKf(optStart + j * 0.3)} }`).join('\n')}
-        @keyframes cbtSubmit { ${kf(submitD, 0.4)} }
-        @keyframes cbtFloat  {
-          0%, 100% { transform: translateY(0); }
-          50%      { transform: translateY(-6px); }
+        @keyframes cbtA0    { ${kf(0.1, 0.5)} }
+        @keyframes cbtA1    { ${kf(0.4, 0.45)} }
+        ${opts.map((_, j) => `@keyframes cbtOpt${j} { ${popKf(0.9 + j * 0.28)} }`).join('\n')}
+        @keyframes cbtNext  { ${kf(2.2, 0.4)} }
+        @keyframes cbtPencil {
+          0%,100% { transform: translateY(0) rotate(-15deg); }
+          50%      { transform: translateY(-10px) rotate(-9deg); }
         }
       `}</style>
     </div>
