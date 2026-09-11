@@ -48,7 +48,7 @@ export default function LoginPage() {
       {/* ── Card ── */}
       <div
         className="relative w-full rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row"
-        style={{ maxWidth: 860, background: '#f0eff6' }}
+        style={{ maxWidth: 860, background: '#f0eff6', border: '1.5px solid rgba(255,255,255,0.25)' }}
       >
 
         {/* ─── Left: Form ─── */}
@@ -196,7 +196,7 @@ export default function LoginPage() {
         {/* ─── Right: Animation ─── */}
         <div
           className="hidden md:flex flex-1 items-center justify-center relative px-6 py-10"
-          style={{ background: '#f0eff6' }}
+          style={{ background: '#f0eff6', borderLeft: '1.5px solid rgba(104,29,244,0.1)' }}
         >
           {/* Small dot accent */}
           <div className="absolute top-5 right-5 opacity-25">
