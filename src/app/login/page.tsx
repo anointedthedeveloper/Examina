@@ -104,9 +104,9 @@ export default function LoginPage() {
                 onChange={e => setUsername(e.target.value)}
                 required
                 className="w-full rounded-xl bg-white px-4 py-3.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all"
-                style={{ border: '1.5px solid #e5e7eb' }}
+                style={{ border: '1.5px solid #d0c8f0' }}
                 onFocus={e => (e.currentTarget.style.border = '1.5px solid #681DF4')}
-                onBlur={e  => (e.currentTarget.style.border = '1.5px solid #e5e7eb')}
+                onBlur={e  => (e.currentTarget.style.border = '1.5px solid #d0c8f0')}
               />
             </div>
 
@@ -125,9 +125,9 @@ export default function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   required
                   className="w-full rounded-xl bg-white px-4 py-3.5 pr-12 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none transition-all"
-                  style={{ border: '1.5px solid #e5e7eb' }}
+                  style={{ border: '1.5px solid #d0c8f0' }}
                   onFocus={e => (e.currentTarget.style.border = '1.5px solid #681DF4')}
-                  onBlur={e  => (e.currentTarget.style.border = '1.5px solid #e5e7eb')}
+                  onBlur={e  => (e.currentTarget.style.border = '1.5px solid #d0c8f0')}
                 />
                 <button
                   type="button"
