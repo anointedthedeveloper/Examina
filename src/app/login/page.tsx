@@ -157,7 +157,7 @@ export default function LoginPage() {
           </form>
 
           <p className="text-xs text-gray-400 mt-8">
-            Anobyte Technologies &copy; {new Date().getFullYear()}
+            &copy; {new Date().getFullYear()} Anobyte Technologies
           </p>
         </div>
 
@@ -167,7 +167,7 @@ export default function LoginPage() {
           style={{ background: '#f0f0f5' }}
         >
           <SmallDotGrid className="absolute top-5 right-5 opacity-25" />
-          <ExamIllustration />
+          <ExamAnimation />
         </div>
       </div>
     </main>
@@ -219,127 +219,173 @@ function SmallDotGrid({ className }: { className?: string }) {
   )
 }
 
-/* ─── Exam Illustration ───────────────────────────────────────── */
+/* ─── Exam Animation ──────────────────────────────────────────── */
 
-function ExamIllustration() {
+function ExamAnimation() {
+  // Total loop = 5s. Each item fades in at its delay, holds, then everything
+  // resets at ~4.5s and the cycle repeats.
+  const LOOP = 5 // seconds
+
+  const lines = [
+    { w: '85%', delay: 0.2 },
+    { w: '70%', delay: 0.6 },
+    { w: '90%', delay: 1.0 },
+    { w: '60%', delay: 1.4 },
+    { w: '78%', delay: 1.8 },
+  ]
+
+  const bubbleDelay = [2.2, 2.4, 2.6, 2.8]
+  const tickDelay = 3.1
+
+  // Keyframe: item fades in at `delay`, stays visible, fades out near end
+  // We express everything as % of LOOP duration
+  function lineKf(delay: number) {
+    const inPct  = (delay / LOOP) * 100
+    const outPct = ((LOOP - 0.4) / LOOP) * 100
+    return `
+      0%        { opacity:0; transform:translateY(6px); }
+      ${inPct.toFixed(1)}%  { opacity:0; transform:translateY(6px); }
+      ${(inPct + 8).toFixed(1)}% { opacity:1; transform:translateY(0); }
+      ${outPct.toFixed(1)}% { opacity:1; transform:translateY(0); }
+      100%      { opacity:0; transform:translateY(0); }
+    `
+  }
+
+  function bubbleKf(delay: number) {
+    const inPct  = (delay / LOOP) * 100
+    const outPct = ((LOOP - 0.4) / LOOP) * 100
+    return `
+      0%        { opacity:0; transform:scale(0.4); }
+      ${inPct.toFixed(1)}%  { opacity:0; transform:scale(0.4); }
+      ${(inPct + 6).toFixed(1)}% { opacity:1; transform:scale(1); }
+      ${outPct.toFixed(1)}% { opacity:1; transform:scale(1); }
+      100%      { opacity:0; transform:scale(1); }
+    `
+  }
+
   return (
-    <svg
-      viewBox="0 0 320 280"
-      className="w-full max-w-xs"
-      role="img"
-      aria-label="Student sitting an exam with answer sheet, pencil and clock"
-    >
-      {/* Desk shadow */}
-      <ellipse cx="160" cy="252" rx="110" ry="10" fill="#c4b5fd" opacity="0.25" />
+    <div className="relative flex items-center justify-center w-64 h-72 select-none" aria-hidden="true">
 
-      {/* Desk surface */}
-      <rect x="40" y="185" width="240" height="14" rx="4" fill="#7c3aed" opacity="0.2" />
-      <rect x="44" y="192" width="232" height="60" rx="4" fill="#ede9fe" opacity="0.6" />
+      {/* Floating dots top-left */}
+      <div className="absolute top-3 left-3" style={{ animation: 'examFloat 3s ease-in-out infinite' }}>
+        <svg width="38" height="38" viewBox="0 0 38 38">
+          {[0,1,2].map(r => [0,1,2].map(c => (
+            <circle key={`${r}${c}`} cx={c*13+6} cy={r*13+6} r="2" fill="#681DF4" opacity="0.2" />
+          )))}
+        </svg>
+      </div>
 
-      {/* Desk legs */}
-      <rect x="60" y="252" width="8" height="22" rx="3" fill="#7c3aed" opacity="0.3" />
-      <rect x="252" y="252" width="8" height="22" rx="3" fill="#7c3aed" opacity="0.3" />
+      {/* Paper */}
+      <div
+        className="absolute rounded-2xl overflow-hidden"
+        style={{
+          width: 178,
+          height: 218,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -54%)',
+          background: 'white',
+          boxShadow: '0 8px 32px rgba(104,29,244,0.12)',
+        }}
+      >
+        {/* Header */}
+        <div style={{ height: 32, background: '#681DF4', display: 'flex', alignItems: 'center', paddingLeft: 14 }}>
+          <span style={{ color: 'white', fontSize: 8, fontWeight: 700, letterSpacing: 1.5 }}>EXAM PAPER</span>
+        </div>
 
-      {/* Answer sheet */}
-      <rect x="72" y="155" width="110" height="100" rx="5" fill="white" />
-      <rect x="72" y="155" width="110" height="18" rx="5" fill="#681DF4" />
-      <text x="127" y="168" textAnchor="middle" fontSize="7" fill="white" fontWeight="bold" letterSpacing="1">
-        ANSWER SHEET
-      </text>
+        {/* Lines */}
+        <div style={{ padding: '14px 16px 0', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {lines.map((line, i) => (
+            <div
+              key={i}
+              style={{
+                height: 7,
+                borderRadius: 4,
+                background: i % 2 === 0 ? '#ede9fe' : '#c4b5fd',
+                width: line.w,
+                opacity: 0,
+                animation: `examLine${i} ${LOOP}s ease-in-out infinite`,
+              }}
+            />
+          ))}
 
-      {/* Q rows with A B C D bubbles */}
-      {[0, 1, 2, 3, 4, 5].map((i) => (
-        <g key={i} transform={`translate(82, ${183 + i * 13})`}>
-          <text x="0" y="8" fontSize="6" fill="#6b7280" fontWeight="600">{i + 1}.</text>
-          {['A', 'B', 'C', 'D'].map((opt, j) => {
-            const filled =
-              (i === 0 && j === 1) || (i === 1 && j === 3) ||
-              (i === 2 && j === 0) || (i === 4 && j === 2)
-            return (
-              <g key={opt} transform={`translate(${14 + j * 17}, 0)`}>
-                <circle
-                  cx="5.5" cy="4.5" r="4.5"
-                  fill={filled ? '#681DF4' : 'none'}
-                  stroke={filled ? '#681DF4' : '#c4b5fd'}
-                  strokeWidth="1.2"
-                />
-                <text
-                  x="5.5" y="7.5"
-                  textAnchor="middle"
-                  fontSize="5"
-                  fill={filled ? 'white' : '#a78bfa'}
-                  fontWeight="600"
-                >
-                  {opt}
-                </text>
-              </g>
-            )
-          })}
-        </g>
-      ))}
+          {/* MCQ bubbles */}
+          <div style={{ display: 'flex', gap: 8, paddingTop: 2 }}>
+            {['A', 'B', 'C', 'D'].map((opt, j) => (
+              <div
+                key={opt}
+                style={{
+                  width: 26, height: 26, borderRadius: '50%',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 9, fontWeight: 700,
+                  background: j === 2 ? '#681DF4' : '#ede9fe',
+                  color: j === 2 ? 'white' : '#a78bfa',
+                  opacity: 0,
+                  animation: `examBubble${j} ${LOOP}s ease-in-out infinite`,
+                }}
+              >
+                {opt}
+              </div>
+            ))}
+          </div>
 
-      {/* Pencil */}
-      <g transform="translate(196, 148) rotate(-35)">
-        <rect x="0" y="0" width="11" height="65" rx="2" fill="#fbbf24" />
-        <rect x="0" y="0" width="11" height="9" rx="2" fill="#f87171" />
-        <rect x="0" y="9" width="11" height="4" fill="#94a3b8" />
-        <polygon points="0,65 11,65 5.5,76" fill="#fcd34d" />
-        <polygon points="2.5,70 8.5,70 5.5,76" fill="#1e293b" />
-        <rect x="2.5" y="14" width="2" height="46" rx="1" fill="white" opacity="0.3" />
-      </g>
+          {/* Tick row */}
+          <div
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              opacity: 0,
+              animation: `examTick ${LOOP}s ease-in-out infinite`,
+            }}
+          >
+            <div style={{
+              width: 18, height: 18, borderRadius: '50%', background: '#681DF4',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}>
+              <svg width="10" height="10" viewBox="0 0 10 10">
+                <path d="M2 5.5 l2 2 l4-4" stroke="white" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div style={{ height: 6, width: 60, borderRadius: 3, background: '#c4b5fd' }} />
+          </div>
+        </div>
+      </div>
 
-      {/* Person — head */}
-      <circle cx="162" cy="88" r="20" fill="#fcd34d" />
-      {/* hair */}
-      <path d="M142 86 Q145 67 162 65 Q179 67 182 86 Q174 76 162 77 Q150 76 142 86Z" fill="#1e3a5f" />
-      {/* body */}
-      <rect x="149" y="107" width="26" height="32" rx="6" fill="#681DF4" />
-      {/* collar */}
-      <path d="M162 107 l-5 7 l5-3.5 l5 3.5 l-5-7Z" fill="white" opacity="0.35" />
-      {/* left arm resting */}
-      <path d="M149 118 Q125 130 108 168" stroke="#681DF4" strokeWidth="9" strokeLinecap="round" fill="none" />
-      <circle cx="108" cy="170" r="6.5" fill="#fcd34d" />
-      {/* right arm with pencil */}
-      <path d="M175 118 Q194 132 204 156" stroke="#681DF4" strokeWidth="9" strokeLinecap="round" fill="none" />
-      <circle cx="205" cy="158" r="6.5" fill="#fcd34d" />
+      {/* Pencil — bobs and rotates */}
+      <div
+        className="absolute"
+        style={{
+          bottom: 22,
+          right: 18,
+          animation: 'examPencil 2s ease-in-out infinite',
+          transformOrigin: 'bottom center',
+        }}
+      >
+        <svg width="32" height="90" viewBox="0 0 32 90">
+          <rect x="7" y="0" width="18" height="62" rx="3" fill="#fbbf24" />
+          <rect x="7" y="0" width="18" height="10" rx="3" fill="#f87171" />
+          <rect x="7" y="10" width="18" height="5" fill="#d1d5db" />
+          <polygon points="7,62 25,62 16,78" fill="#fde68a" />
+          <polygon points="11,70 21,70 16,78" fill="#1c1917" />
+          <rect x="11" y="16" width="3" height="42" rx="1.5" fill="white" opacity="0.22" />
+        </svg>
+      </div>
 
-      {/* Chair */}
-      <rect x="136" y="178" width="5" height="30" rx="2" fill="#94a3b8" />
-      <rect x="179" y="178" width="5" height="30" rx="2" fill="#94a3b8" />
-      <rect x="133" y="206" width="54" height="4" rx="2" fill="#94a3b8" />
-      <rect x="133" y="170" width="54" height="9" rx="4" fill="#7c3aed" opacity="0.45" />
-      <rect x="133" y="138" width="7" height="34" rx="3" fill="#7c3aed" opacity="0.38" />
-      <rect x="180" y="138" width="7" height="34" rx="3" fill="#7c3aed" opacity="0.38" />
-      <rect x="133" y="138" width="54" height="7" rx="3" fill="#7c3aed" opacity="0.38" />
-
-      {/* Clock on wall */}
-      <circle cx="278" cy="72" r="22" fill="white" stroke="#681DF4" strokeWidth="2.5" />
-      <circle cx="278" cy="72" r="2.5" fill="#681DF4" />
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
-        const a = (i * 30 - 90) * Math.PI / 180
-        return (
-          <line
-            key={i}
-            x1={278 + 16 * Math.cos(a)} y1={72 + 16 * Math.sin(a)}
-            x2={278 + 19 * Math.cos(a)} y2={72 + 19 * Math.sin(a)}
-            stroke="#a78bfa"
-            strokeWidth={i % 3 === 0 ? 2 : 1}
-          />
-        )
-      })}
-      {/* hour hand pointing ~10 */}
-      <line x1="278" y1="72" x2="269" y2="58" stroke="#681DF4" strokeWidth="2.5" strokeLinecap="round" />
-      {/* minute hand pointing ~2 */}
-      <line x1="278" y1="72" x2="290" y2="64" stroke="#3b0764" strokeWidth="1.8" strokeLinecap="round" />
-
-      {/* Grade A badge */}
-      <circle cx="54" cy="70" r="20" fill="#681DF4" />
-      <text x="54" y="67" textAnchor="middle" fontSize="13" fill="white" fontWeight="bold">A</text>
-      <text x="54" y="78" textAnchor="middle" fontSize="6.5" fill="#c4b5fd">grade</text>
-
-      {/* Accent diamonds */}
-      <rect x="44" y="130" width="9" height="9" rx="1" fill="#a78bfa" opacity="0.45" transform="rotate(45 48.5 134.5)" />
-      <rect x="248" y="200" width="8" height="8" rx="1" fill="#681DF4" opacity="0.3" transform="rotate(45 252 204)" />
-    </svg>
+      {/* Keyframes injected via style tag */}
+      <style>{`
+        ${lines.map((l, i) => `@keyframes examLine${i} { ${lineKf(l.delay)} }`).join('\n')}
+        ${bubbleDelay.map((d, j) => `@keyframes examBubble${j} { ${bubbleKf(d)} }`).join('\n')}
+        @keyframes examTick {
+          ${lineKf(tickDelay)}
+        }
+        @keyframes examPencil {
+          0%, 100% { transform: translateY(0) rotate(-14deg); }
+          50%       { transform: translateY(-10px) rotate(-9deg); }
+        }
+        @keyframes examFloat {
+          0%, 100% { transform: translateY(0); }
+          50%       { transform: translateY(-5px); }
+        }
+      `}</style>
+    </div>
   )
 }
