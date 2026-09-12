@@ -3,6 +3,18 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 
+// Prevents CbtAnimation hydration mismatch — only renders after mount
+function ClientOnly({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return (
+    <div className="w-full flex items-center justify-center" style={{ minHeight: 320 }}>
+      <div className="w-8 h-8 rounded-full border-2 border-[#681DF4] border-t-transparent animate-spin" />
+    </div>
+  )
+  return <>{children}</>
+}
+
 export default function LoginPage() {
   const [username, setUsername]         = useState('')
   const [password, setPassword]         = useState('')
@@ -198,11 +210,12 @@ export default function LoginPage() {
           className="hidden md:flex flex-1 items-center justify-center relative px-6 py-10"
           style={{ background: '#f0eff6', borderLeft: '1.5px solid rgba(104,29,244,0.1)' }}
         >
-          {/* Small dot accent */}
           <div className="absolute top-5 right-5 opacity-25">
             <SmallDots />
           </div>
-          <CbtAnimation />
+          <ClientOnly>
+            <CbtAnimation />
+          </ClientOnly>
         </div>
 
       </div>

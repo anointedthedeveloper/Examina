@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${geist.className} bg-gray-50 text-gray-900 antialiased`}>
+      <body className={`${geist.className} bg-gray-50 text-gray-900 antialiased`} suppressHydrationWarning>
         {children}
       </body>
     </html>
