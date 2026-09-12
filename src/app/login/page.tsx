@@ -63,6 +63,7 @@ export default function LoginPage() {
 
   return (
     <main
+      suppressHydrationWarning
       className="min-h-screen flex items-center justify-center p-5 relative overflow-hidden"
       style={{ background: 'linear-gradient(135deg, #3b0ca8 0%, #5612d6 45%, #681DF4 100%)' }}
     >

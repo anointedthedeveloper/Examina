@@ -7,8 +7,8 @@
 update public.profiles
 set role = 'admin',
     full_name = 'School Administrator'
-where email = 'admin@peterharvard.edu';
+where email = 'admin@peterharvard.cloud';
 
 -- Verify
 select id, email, full_name, role from public.profiles
-where email = 'admin@peterharvard.edu';
+where email = 'admin@peterharvard.cloud';
