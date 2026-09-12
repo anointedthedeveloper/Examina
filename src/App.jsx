@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import logo from '/examina.png'
 import { supabase } from './supabase'
+import { toAuthEmail } from './utils'
 import Dashboard from './Dashboard'
 import './App.css'
 
@@ -16,7 +17,7 @@ function App() {
     setError('')
     setLoading(true)
 
-    const email = `${username.toLowerCase()}@examina.internal`
+    const email = toAuthEmail(username)
 
     const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email,

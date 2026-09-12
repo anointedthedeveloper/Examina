@@ -1,20 +1,14 @@
-import { supabase } from './supabase'
-import './Dashboard.css'
+import AdminDashboard from './AdminDashboard'
+import TeacherDashboard from './TeacherDashboard'
+import StudentDashboard from './StudentDashboard'
+import ParentDashboard from './ParentDashboard'
 
 export default function Dashboard({ profile, onLogout }) {
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    onLogout()
+  switch (profile.role) {
+    case 'admin':   return <AdminDashboard   profile={profile} onLogout={onLogout} />
+    case 'teacher': return <TeacherDashboard profile={profile} onLogout={onLogout} />
+    case 'student': return <StudentDashboard profile={profile} onLogout={onLogout} />
+    case 'parent':  return <ParentDashboard  profile={profile} onLogout={onLogout} />
+    default:        return <p>Unknown role.</p>
   }
-
-  return (
-    <div className="dashboard-page">
-      <div className="dashboard-card">
-        <span className="role-badge">{profile.role}</span>
-        <h1>Welcome, {profile.full_name || profile.username}</h1>
-        <p className="dash-sub">You are logged in as <strong>{profile.username}</strong></p>
-        <button className="btn-logout" onClick={handleLogout}>Log Out</button>
-      </div>
-    </div>
-  )
 }
