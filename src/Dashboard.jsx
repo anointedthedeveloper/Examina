@@ -1,14 +1,23 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
 import AdminDashboard from './AdminDashboard'
 import TeacherDashboard from './TeacherDashboard'
 import StudentDashboard from './StudentDashboard'
 import ParentDashboard from './ParentDashboard'
 
 export default function Dashboard({ profile, onLogout }) {
-  switch (profile.role) {
-    case 'admin':   return <AdminDashboard   profile={profile} onLogout={onLogout} />
-    case 'teacher': return <TeacherDashboard profile={profile} onLogout={onLogout} />
-    case 'student': return <StudentDashboard profile={profile} onLogout={onLogout} />
-    case 'parent':  return <ParentDashboard  profile={profile} onLogout={onLogout} />
-    default:        return <p>Unknown role.</p>
-  }
+  const props = { profile, onLogout }
+
+  const roleComponent = {
+    admin:   <AdminDashboard   {...props} />,
+    teacher: <TeacherDashboard {...props} />,
+    student: <StudentDashboard {...props} />,
+    parent:  <ParentDashboard  {...props} />,
+  }[profile.role] ?? <p>Unknown role.</p>
+
+  return (
+    <Routes>
+      <Route path="/*" element={roleComponent} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
+  )
 }
