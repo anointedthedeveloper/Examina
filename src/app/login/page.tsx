@@ -27,13 +27,36 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
+      // Step 1: resolve username → email
+      const lookup = await fetch('/api/auth/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username.trim() }),
+      })
+
+      if (!lookup.ok) {
+        const data = await lookup.json().catch(() => ({}))
+        setError(data.error ?? 'Username not found. Check your username and try again.')
+        setLoading(false)
+        return
+      }
+
+      const { email } = await lookup.json()
+
+      // Step 2: sign in with resolved email + password
       const { createClient } = await import('@/lib/supabase/client')
       const supabase = createClient()
-      const { error } = await supabase.auth.signInWithPassword({ email: username, password })
-      if (error) { setError(error.message); setLoading(false); return }
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (error) {
+        setError('Incorrect password. Please try again.')
+        setLoading(false)
+        return
+      }
+
       window.location.href = '/dashboard'
     } catch {
-      setError('Authentication service not configured yet.')
+      setError('Something went wrong. Please try again.')
       setLoading(false)
     }
   }
