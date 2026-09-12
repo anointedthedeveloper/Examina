@@ -1,14 +1,52 @@
 import { useState } from 'react'
 import logo from '/examina.png'
+import { supabase } from './supabase'
+import Dashboard from './Dashboard'
 import './App.css'
 
 function App() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [profile, setProfile] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    alert(`Logging in as ${username}`)
+    setError('')
+    setLoading(true)
+
+    const email = `${username.toLowerCase()}@examina.internal`
+
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (authError || !authData.user) {
+      setError('Invalid username or password.')
+      setLoading(false)
+      return
+    }
+
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, username, role, full_name')
+      .eq('id', authData.user.id)
+      .single()
+
+    if (profileError || !profileData) {
+      setError('Profile not found.')
+      setLoading(false)
+      return
+    }
+
+    setProfile(profileData)
+    setLoading(false)
+  }
+
+  if (profile) {
+    return <Dashboard profile={profile} onLogout={() => setProfile(null)} />
   }
 
   return (
@@ -41,9 +79,11 @@ function App() {
               required
             />
           </div>
-          <button type="submit" className="btn-login">Log In</button>
+          {error && <p className="error">{error}</p>}
+          <button type="submit" className="btn-login" disabled={loading}>
+            {loading ? 'Logging in…' : 'Log In'}
+          </button>
         </form>
-
       </div>
     </div>
   )

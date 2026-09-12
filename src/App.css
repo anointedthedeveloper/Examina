@@ -87,8 +87,11 @@ form {
   transition: background 0.2s;
 }
 
-.btn-login:hover {
-  background: #6d28d9;
+.error {
+  color: #dc2626;
+  font-size: 13px;
+  text-align: center;
+  margin: 0;
 }
 
 .footer-link {
